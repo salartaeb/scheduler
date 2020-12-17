@@ -45,10 +45,10 @@ export default function Form(props) {
 					<input
 						className='appointment__create-input text--semi-bold'
 						data-testid='student-name-input'
-						name='name'
+						name= {props.name}
 						type='text'
 						placeholder='Enter Student Name'
-						value={name}
+						interviewer={interviewer}
 						onChange={(event) => setName(event.target.value)}
 					/>
 				</form>
@@ -56,7 +56,7 @@ export default function Form(props) {
 				<InterviewerList
 					interviewers={props.interviewers}
 					interviewer={interviewer}
-					setInterviewer={setInterviewer}
+					onChange={(event) => setInterviewer(event)}
 				/>
 			</section>
 			<section className='appointment__card-right'>
@@ -64,9 +64,7 @@ export default function Form(props) {
 					<Button danger onClick={cancel}>
 						Cancel
 					</Button>
-					<Button
-						confirm
-						onClick={() => {
+					<Button confirm onClick={() => {
 							validate();
 						}}
 					>
