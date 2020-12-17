@@ -25,9 +25,9 @@ export default function Appointment(props) {
       <Header time={props.time}/>
       {mode === EMPTY && (<Empty onAdd={transition}/>)}
       {mode === SHOW && (
-        <Show student={props.student} interviewer={props.interview}/>
+        <Show student={props.interview.student} interviewer={props.interview.interviewer}/>
       )}
-      {mode === CREATE && <Form interviewers={[]} onCancel={back}></Form>}
+  {mode === CREATE && <Form name={props.name} value={props.value} interviewers={props.interviewers} onCancel={back}/>}
     </article>
     </>
   )
