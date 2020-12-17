@@ -6,7 +6,6 @@ let classnames = require('classnames');
 
 
 export default function DayListItem(props) {
-  console.log(props);
   const DayListItemClass = classnames("day-list__item", {
     "day-list__item--selected": props.selected,
     "day-list__item--full": props.spots === 0
@@ -22,7 +21,8 @@ export default function DayListItem(props) {
   return (
     <li 
     className = {DayListItemClass}
-    onClick={() => props.setDay(props.name)}>
+    onClick={() => props.setDay(props.name)}
+    data-testid="day">
       <h2 className="text--regular">{props.name}</h2>
       <h3 className="text--light">{formatSpots(props)}</h3>
     </li>
