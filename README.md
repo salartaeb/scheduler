@@ -1,17 +1,59 @@
 # Interview Scheduler 
 
-## Project Features
+## Project Description
 Interview Scheduler is a SPA (Single Page Application) for tracking students interviews built with the latest tools and techniques for optimized user experience. The App utilizes React built-in and custom hooks and allows users to add, edit and delete appointments in real time. Data is persisted by the API server using a PostgreSQL database. The client application communicates with an API server over HTTP, using the JSON format. For quality assurance, the project follows best practices of TDD (Test Driven Development), where individual Components are tested in isolation as well as End-to-End testing is performed.
 
+## Project Features
+  * Appointment days (Monday to Friday) are displayed and colour-coordinated depending on availability
+  * The days show the number of slots available as a snapshot of the week
+  * A user can switch between days and see detailed information
+  * Booked and available slots are clearly differentiated
+  * A user can book interviews by typing in a student name and clicking on an interviewer from a list of interviewers
+  * A user can change the details of an existing interview by pressing the edit icon
+  * A user can cancel an existing interview, a pop-up message will ask to confirm the action before permanently deleting an interview
+  * Days display currently remaining spots and capture updates after each modification
+
+
+
+
 ## Regular View
-![Regular View Screenshot](http://url/to/img.png)
+![Regular View Screenshot](https://github.com/marcusalint/scheduler/blob/master/Images/Regular%20View%20of%20Appointments.png?raw=true)
 
 ## Form Validation and Interview Cancellation
-![Form Validation and Interview Cancellation Screenshot](http://url/to/img.png)
+![Form Validation and Interview Cancellation Screenshot](https://github.com/marcusalint/scheduler/blob/master/Images/Form%20Validation%20and%20Interview%20Cancellation.png?raw=true)
 
 ## Booking an Interview
-![Booking an Interview](http://url/to/img.png)
+![Booking an Interview](https://github.com/marcusalint/scheduler/blob/master/Images/Book%20Interview.png?raw=true)
 
+## Project Stack
+  Front-End: React, Axios, JSX, HTML, SASS, JavaScript
+
+  Back-End: Express, Node.js, PostgreSQL
+
+  Testing: Storybook, Webpack Dev Server, Jest, Testing Library and Cypress
+
+
+
+# Dependencies
+ * Axios
+ * Classnames
+ * Normalize.css
+ * React
+ * React-dom
+ * React-scripts
+ * Babel/core
+ * Storybook/addon-actions
+ * Storybook/addon-backgrounds
+ * Storybook/addon-links
+ * Storybook/addons
+ * Storybook/react
+ * Testing-library/jest-dom
+ * Testing-library/react
+ * Testing-library/react-hooks
+ * Babel-loader
+ * Node-sass
+ * Prop-types
+ * React-test-renderer
 
 
 ## Setup
