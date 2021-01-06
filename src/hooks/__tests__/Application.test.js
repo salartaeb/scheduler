@@ -2,84 +2,115 @@
   We are rendering `<Application />` down below, so we need React.createElement
 */
 import React from "react";
+import ReactDOM from "react-dom";
 
 /*
   We import our helper functions from the react-testing-library
   The render function allows us to render Components
 */
-import { render, cleanup } from "@testing-library/react";
-
+import { render, cleanup, waitForElement, wait, fireEvent, queryByAltText, getByText, getByAltText, getAllByTestId, prettyDOM, getByPlaceholderText, queryByText } from "@testing-library/react";
 /*
   We import the component that we are testing
 */
-import Appointment from "components/Appointment";
-import Confirm from "components/Appointment/Confirm";
+import axios from 'axios';
+import Application from "components/Application";
 import Empty from "components/Appointment/Empty";
-import Error from "components/Appointment/Error";
-import Form from "components/Appointment/Form";
-import Header from "components/Appointment/Header";
-import Show from "components/Appointment/Show";
-import Status from "components/Appointment/Status";
+
+beforeEach(() => {
+  jest.resetModules();
+});
+
+afterEach(cleanup);
+
+axios.defaults.baseURL = "http://localhost:8001";
 
 /*
   A test that renders a React Component
 */
 
-afterEach(cleanup);
+describe("Application", () => {
+  it("defaults to Monday and changes the schedule when a new day is selected", async () => {
+    const { getByText } = render(<Application />);
 
-const interviewers = [
-  { id: 1, name: "Sylvia Palmer", avatar: "https://i.imgur.com/LpaY82x.png" },
-  { id: 2, name: "Tori Malcolm", avatar: "https://i.imgur.com/Nmx0Qxo.png" }
-];
-
-const interviewer = {
-  id: 1,
-  name: "Sylvia Palmer",
-  avatar: "https://i.imgur.com/LpaY82x.png"
-};
-
-describe("Appointment", () => {
-  it("renders without crashing", () => {
-    render(<Appointment />);
+    await wait(() => getByText("Monday"));
+      fireEvent.click(getByText("Tuesday"));
+      expect(getByText("Leopold Silvers")).toBeInTheDocument();
   });
 
-  it("Confirm renders w/o crashing", () => {
-    render(<Confirm 
-      message="Confirm"
-    />);
+  it("loads data, books an interview and reduces the spots remaining for Monday by 1", async () => {
+    const { container, debug } = render(<Application />);
+  
+    await waitForElement(() => getByText(container, "Archie Cohen"));
+    const appointments = getAllByTestId(container, "appointment");
+    const appointment = appointments[0];
+  
+    fireEvent.click(getByAltText(appointment, "Add"));
+  
+    fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
+      target: { value: "Lydia Miller-Jones" }
+    });
+  
+    fireEvent.click(getByAltText(appointment, "Sylvia Palmer"));
+    fireEvent.click(getByText(appointment, "Save"));
+  
+    expect(getByText(appointment, "Saving")).toBeInTheDocument();
+  
+    await waitForElement(() => getByText(appointment, "Lydia Miller-Jones"));
+  
+    const day = getAllByTestId(container, "day").find(day =>
+      queryByText(day, "Monday")
+    );
+  
+    expect(getByText(day, "no spots remaining")).toBeInTheDocument();
   });
 
-  it("Empty renders w/o crashing", () => {
-    render(<Empty />);
+  it("loads data, cancels an interview and increases the spots remaining for Monday by 1", async () => {
+
+    const { container } = render(<Application />);
+
+    await waitForElement(() => getByText(container, "Archie Cohen"));
+
+    const appointment = getAllByTestId(container, "appointment").find(
+      appointment => queryByText(appointment, "Archie Cohen")
+    );
+
+    fireEvent.click(queryByAltText(appointment, "Delete"));
+
+    expect(getByText(appointment, "Are you sure you would like to delete?")).toBeInTheDocument();
+
+    fireEvent.click(queryByText(appointment, "Confirm"));
+
+    expect(getByText(appointment, "Deleting")).toBeInTheDocument();
+
+    await waitForElement(() => getByAltText(appointment, "Add"));
+    const day = getAllByTestId(container, "day").find(day =>
+      queryByText(day, "Monday")
+    );
+
+    expect(getByText(day, "2 spots remaining")).toBeInTheDocument();
   });
 
-  it("Error renders w/o crashing", () => {
-    render(<Error 
-      message="Oops"
-    />);
-  });
+  it("load data, edits an interview and keeps the spots remaining for Monday the same", async () => {
+    const { container } = render(<Application />);
+    await waitForElement(() => getByText(container, "Archie Cohen"));
 
-  it("Form renders w/o crashing", () => {
-    render(<Form 
-      name={interviewer}
-      value={2}
-      interviewers={interviewers}
-    />);
-  });
+    const appointment = getAllByTestId(container, "appointment").find(
+      appointment => queryByText(appointment, "Archie Cohen")
+    );
 
-  it("Header renders w/o crashing", () => {
-    render(<Header />);
-  });
+    fireEvent.click(queryByAltText(appointment, "Edit"));
+    fireEvent.click(getByAltText(appointment, "Sylvia Palmer"));
+    fireEvent.click(getByText(appointment, "Save"));
 
-  it("Show renders w/o crashing", () => {
-    render(<Show 
-      student="random"
-      interviewer={interviewer}
-    />);
-  });
+    expect(getByText(appointment, "Saving")).toBeInTheDocument();
 
-  it("Status renders w/o crashing", () => {
-    render(<Status />);
-  });
+    await waitForElement(() => getByText(container, "Archie Cohen"))
 
+    expect(getByText(container, "Sylvia Palmer")).toBeInTheDocument();
+
+    const day = getAllByTestId(container, "day").find(day => 
+      queryByText(day, "Monday")
+    );
+    expect(getByText(day, "1 spot remaining"))
+  })
 });

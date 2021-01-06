@@ -19,33 +19,13 @@ export function getInterview(state, interview) {
   }
 }
 
-export function getInterviewersForDay(state, day){
-  let result = [];
-  let days = state.days;
-  let interviewersForStateDay;
+export function getInterviewersForDay(state, dayName) {
+  const validDayNames = state.days.map(dayObj => dayObj.name);
+  if (!dayName || !validDayNames.includes(dayName)) return [];
 
-  //Checks validity of state.days
-  if(state.days.length < 1){
-    return [];
-  }
-
-  //Retrieves interviewers for day
-  for(const stateDay of days){
-    if(stateDay.name === day){
-      interviewersForStateDay = stateDay.interviewers;
-    }
-  }
-
-  //if no day is found, return empty []
-  if(!interviewersForStateDay){
-    return [];
-  }
-
-  //Push interviewer objects to results;
-  for(const id of interviewersForStateDay){
-    let interviewer = state.interviewers[id];
-    result.push(interviewer);
-  }
-
-  return result;
+  const todayObj = state.days.filter(dayObj => dayObj.name === dayName)[0];
+  const interviewersObj = todayObj.interviewers.map(
+    interId => state.interviewers[interId]
+  );
+  return interviewersObj;
 }

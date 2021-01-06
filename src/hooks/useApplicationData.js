@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function useApplicationData() {
@@ -14,6 +14,7 @@ export default function useApplicationData() {
     setState({...state, day})
   }
 
+  // API requests
   useEffect(() => {
     Promise.all([
       Promise.resolve(axios.get('http://localhost:8001/api/days')),
@@ -69,7 +70,7 @@ export default function useApplicationData() {
     let days = state.days
     days[dayOfWeek] = day;
     
-    return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview:interview})
+    return axios.put(`/api/appointments/${id}`, {interview:interview})
     .then(res => {
         setState({...state, appointments, days})
         return res

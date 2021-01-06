@@ -1,4 +1,3 @@
-
 import React from 'react';
 import './InterviewerListItem.scss';
 import classnames from 'classnames';

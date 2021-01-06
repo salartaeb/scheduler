@@ -17,22 +17,20 @@ export default function InterviewerList(props) {
                   key={value.id}
                   name={value.name}
                   avatar={value.avatar}
-                  selected={value.id === value}
+                  selected={value.id === props.value}
                   setInterviewer={(event) => props.onChange(value.id)}
                   
-        
                 />
               )
             })
           }
-
       </ul>
     </section>
   )
 }
 
+// Setting prop types
 InterviewerList.propTypes = {
   interviewers: PropTypes.array.isRequired
 };
 
-export default InterviewerList;
